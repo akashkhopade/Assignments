@@ -1,0 +1,102 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="YourPage.aspx.cs" Inherits="YourNamespace.YourPage" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Page Search</title>
+    <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" />
+    <script src="https://ajax.aspnetcdn.com/ajax/4.0/1/MicrosoftAjax.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/act/40412/Extended/AutoComplete/AutoCompleteBehavior.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/act/40412/Extended/AutoComplete/AutoCompleteExtenderBehavior.js"></script>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <asp:ScriptManager runat="server"></asp:ScriptManager>
+            <asp:TextBox ID="txtSearch" runat="server"></asp:TextBox>
+            <ajaxToolkit:AutoCompleteExtender
+                runat="server"
+                ID="autoCompleteExtender"
+                TargetControlID="txtSearch"
+                ServiceMethod="GetPageNames"
+                ServicePath="YourWebService.asmx"
+                MinimumPrefixLength="1"
+                CompletionInterval="1000"
+                EnableCaching="true"
+                CompletionSetCount="10">
+            </ajaxToolkit:AutoCompleteExtender>
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+using System;
+using System.Collections.Generic;
+using System.Web.Script.Services;
+using System.Web.Services;
+
+[WebService(Namespace = "http://tempuri.org/")]
+[ScriptService]
+public class YourWebService : WebService
+{
+    [WebMethod]
+    public string[] GetPageNames(string prefixText, int count)
+    {
+        // Implement logic to fetch page names based on the prefixText
+        // You can query your database or any other data source here
+
+        List<string> pageNames = new List<string>
+        {
+            "Page1",
+            "Page2",
+            "Page3"
+            // Add your actual page names here
+        };
+
+        return pageNames.ToArray();
+    }
+}
+
+
+
+
+
+protected void Page_Load(object sender, EventArgs e)
+{
+    txtSearch.TextChanged += TxtSearch_TextChanged;
+}
+
+private void TxtSearch_TextChanged(object sender, EventArgs e)
+{
+    string selectedPage = txtSearch.Text;
+
+    // Implement logic to determine the URL based on the selectedPage
+    // For example:
+    string pageUrl = GetPageUrl(selectedPage);
+
+    // Redirect to the selected page
+    Response.Redirect(pageUrl);
+}
+
+private string GetPageUrl(string pageName)
+{
+    // Implement logic to determine the URL based on the pageName
+    // You might have a mapping between page names and URLs in a database, for instance
+
+    // Placeholder logic:
+    return $"{pageName}.aspx";
+}
