@@ -1,0 +1,65 @@
+<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="YourSearchBox.ascx.cs" Inherits="YourNamespace.YourSearchBox" %>
+
+<div>
+    <asp:TextBox ID="txtSearch" runat="server"></asp:TextBox>
+    <asp:Button ID="btnSearch" runat="server" Text="Search" OnClick="btnSearch_Click" />
+</div>
+
+
+
+using System;
+using System.Web.UI;
+
+namespace YourNamespace
+{
+    public partial class YourSearchBox : UserControl
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            // You can handle additional setup logic here if needed
+        }
+
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            string selectedPage = txtSearch.Text;
+
+            // Implement logic to determine the URL based on the selectedPage
+            // For example:
+            string pageUrl = GetPageUrl(selectedPage);
+
+            // Redirect to the selected page
+            Response.Redirect(pageUrl);
+        }
+
+        private string GetPageUrl(string pageName)
+        {
+            // Implement logic to determine the URL based on the pageName
+            // You might have a mapping between page names and URLs in a database, for instance
+
+            // Placeholder logic:
+            return $"{pageName}.aspx";
+        }
+    }
+}
+
+
+
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="YourPage.aspx.cs" Inherits="YourNamespace.YourPage" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Your Page</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <!-- Include the user control -->
+            <uc:YourSearchBox runat="server" ID="searchBox" />
+        </div>
+    </form>
+</body>
+</html>
+
