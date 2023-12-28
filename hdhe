@@ -1,0 +1,36 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="YourPage.aspx.cs" Inherits="YourNamespace.YourPage" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Chart Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <canvas id="myPieChart" width="400" height="400"></canvas>
+        </div>
+        <script>
+            // Sample data
+            var data = {
+                labels: ['Category A', 'Category B', 'Category C'],
+                datasets: [{
+                    data: [30, 50, 20],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                }]
+            };
+
+            // Get the canvas element
+            var ctx = document.getElementById('myPieChart').getContext('2d');
+
+            // Create a pie chart
+            var myPieChart = new Chart(ctx, {
+                type: 'pie',
+                data: data
+            });
+        </script>
+    </form>
+</body>
+</html>
