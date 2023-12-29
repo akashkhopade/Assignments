@@ -1,0 +1,77 @@
+using System;
+using System.IO;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using OfficeOpenXml;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
+
+public partial class YourPage : Page
+{
+    protected void ConvertExcelToPdfButton_Click(object sender, EventArgs e)
+    {
+        if (FileUpload1.HasFile)
+        {
+            // Get the uploaded file
+            HttpPostedFile postedFile = FileUpload1.PostedFile;
+
+            // Check if the file is an Excel file
+            if (Path.GetExtension(postedFile.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+            {
+                using (var stream = new MemoryStream())
+                {
+                    // Save the uploaded file to a MemoryStream
+                    postedFile.InputStream.CopyTo(stream);
+
+                    // Load the Excel file
+                    using (var excelPackage = new ExcelPackage(stream))
+                    {
+                        using (var pdfStream = new MemoryStream())
+                        {
+                            // Convert Excel to PDF
+                            excelPackage.SaveAs(pdfStream);
+
+                            // Provide the converted PDF for download
+                            Response.Clear();
+                            Response.ContentType = "application/pdf";
+                            Response.AppendHeader("Content-Disposition", "attachment; filename=output.pdf");
+                            pdfStream.WriteTo(Response.OutputStream);
+                            Response.End();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // Handle the case when the uploaded file is not an Excel file
+                Response.Write("Please upload a valid Excel file.");
+            }
+        }
+        else
+        {
+            // Handle the case when no file is uploaded
+            Response.Write("Please select a file to upload.");
+        }
+    }
+}
+
+
+
+
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="YourPage.aspx.cs" Inherits="YourNamespace.YourPage" %>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <asp:FileUpload ID="FileUpload1" runat="server" />
+            <asp:Button ID="ConvertExcelToPdfButton" runat="server" Text="Convert to PDF" OnClick="ConvertExcelToPdfButton_Click" />
+        </div>
+    </form>
+</body>
+</html>
